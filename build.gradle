@@ -1,0 +1,25 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+
+    maven {
+        name 'Hazelcast OSS Snapshots'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+
+    maven {
+        name 'Hazelcast Enterprise Releases'
+        url 'https://repository-hazelcast-l337.forge.cloudbees.com/release/'
+    }
+
+    maven {
+        name 'Hazelcast Enterprise Snapshots'
+        url 'https://repository-hazelcast-l337.forge.cloudbees.com/snapshot/'
+    }
+}
+dependencies {
+    compile "com.hazelcast:hazelcast-all:3.7.1"
+    compile "com.hazelcast.jet:hazelcast-jet:0.2"
+    compile "com.hazelcast.jet:hazelcast-jet-java.util.stream:0.2"
+}

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.hazelcast.util.WordUtil.EXCLUDES;
 import static com.hazelcast.util.WordUtil.PATTERN;
 import static com.hazelcast.util.WordUtil.fillMapWithData;
 import static java.util.stream.Collectors.toMap;
@@ -23,7 +24,7 @@ public class WordCountWithStreams {
 
         //region loading war and peace
         System.out.println("Loading War and Peace...");
-        fillMapWithData("2600-0.txt", source);
+        fillMapWithData("war_and_peace_eng.txt", source);
         System.out.println("Done War and Peace...");
         //endregion
 
@@ -34,7 +35,7 @@ public class WordCountWithStreams {
                 .flatMap(m -> Stream.of(PATTERN.split(m.getValue())))
                 .map(String::toLowerCase)
                 .map(WordUtil::cleanWord)
-                .filter(m -> m.length() >= 4)
+                .filter(m -> m.length() >= 5)
                 .collect(toMap(
                         key -> key,
                         value -> 1,
@@ -42,9 +43,8 @@ public class WordCountWithStreams {
         //endregion
 
         //region top20
-        String[] exclude = {"which", "would", "could", "that", "with", "were", "this", "what", "there", "from"};
         final Map<String, Integer> top10WordsMap = counts.entrySet().stream()
-                .filter(e -> Stream.of(exclude).noneMatch(s -> s.equals(e.getKey())))
+                .filter(e -> Stream.of(EXCLUDES).noneMatch(s -> s.equals(e.getKey())))
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .limit(20)
                 .collect(toMap(

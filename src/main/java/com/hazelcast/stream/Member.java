@@ -17,7 +17,7 @@ public class Member {
 
         //region loading war and peace
         System.out.println("Loading War and Peace...");
-        fillMapWithData("2600-0.txt", source);
+        fillMapWithData("war_and_peace_eng.txt", source);
         System.out.println("Done War and Peace...");
         //endregion
     }

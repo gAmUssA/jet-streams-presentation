@@ -20,18 +20,17 @@ import com.hazelcast.jet.io.Pair;
 import com.hazelcast.jet.runtime.InputChunk;
 import com.hazelcast.jet.runtime.JetPair;
 import com.hazelcast.jet.runtime.OutputCollector;
-import com.hazelcast.stream.WordUtil;
+import com.hazelcast.util.WordUtil;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
+
+import static com.hazelcast.util.WordUtil.PATTERN;
 
 /**
  * Processor which parses incoming lines for individual words and emits a Pair with (word, 1) for each
  * encountered word.
  */
 public class WordGeneratorProcessor implements Processor<Pair<Integer, String>, Pair<String, Integer>> {
-
-    static final Pattern PATTERN = Pattern.compile("\\W+");
 
     @Override
     public boolean process(InputChunk<Pair<Integer, String>> input,

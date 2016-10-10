@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.hazelcast.jet.stream.DistributedCollectors.toIMap;
+import static com.hazelcast.util.WordUtil.EXCLUDES;
 import static com.hazelcast.util.WordUtil.PATTERN;
 import static com.hazelcast.util.WordUtil.fillMapWithData;
 
@@ -42,7 +43,7 @@ public class WordCountWithDistributedStreams {
 
         //region loading war and peace
         System.out.println("Loading War and Peace...");
-        fillMapWithData("2600-0.txt", source);
+        fillMapWithData("war_and_peace_eng.txt", source);
         System.out.println("Done War and Peace...");
         //endregion
 
@@ -51,9 +52,10 @@ public class WordCountWithDistributedStreams {
 
         //region word count
         IMap<String, Integer> counts = streamMap.stream()
-                .flatMap(m -> Stream.of(PATTERN.split(m.getValue().toLowerCase())))
+                .flatMap(m -> Stream.of(PATTERN.split(m.getValue())))
+                .map(String::toLowerCase)
                 .map(WordUtil::cleanWord)
-                .filter(m -> m.length() >= 4)
+                .filter(m -> m.length() >= 5)
                 .collect(toIMap(
                         m -> m,
                         m -> 1,
@@ -61,11 +63,10 @@ public class WordCountWithDistributedStreams {
         //endregion
 
         //region top20
-        String[] exclude = {"which", "would", "could", "that", "with", "were", "this", "what", "there", "from"};
         final IMap<String, Integer> top10Map = IStreamMap.streamMap(counts)
                 .stream()
                 .filter(e -> Stream
-                        .of(exclude)
+                        .of(EXCLUDES)
                         .noneMatch(s -> s.equals(e.getKey())))
                 .sorted((Distributed.Comparator<Map.Entry<String, Integer>>) (o1, o2) -> o2.getValue().compareTo(o1.getValue()))
                 .limit(20)

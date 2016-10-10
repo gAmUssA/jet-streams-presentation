@@ -8,10 +8,11 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Created by vikgamov on 10/3/16.
+ * Utility class contains common methods for loading / cleaning data
  */
 public class WordUtil {
     public static final Pattern PATTERN = Pattern.compile("\\W+");
+    public static final String[] EXCLUDES = {"which", "would", "could", "that", "with", "were", "this", "what", "there", "from", "their", "those"};
 
     private WordUtil() {
     }
@@ -24,17 +25,15 @@ public class WordUtil {
             throws Exception {
 
 
-        InputStream is = WordUtil.class.getResourceAsStream(fileName);
+        InputStream is = WordUtil.class.getClassLoader().getResourceAsStream(fileName);
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(is));
 
-        StringBuilder sb = new StringBuilder();
         String line = null;
         Integer lineNum = 0;
         Map<Integer, String> localMap = new HashMap<>();
         while ((line = reader.readLine()) != null) {
             lineNum++;
             localMap.put(lineNum, line);
-            //sb.append(line).append("\n");
         }
         map.putAll(localMap);
 

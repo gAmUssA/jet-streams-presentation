@@ -23,7 +23,8 @@ import com.hazelcast.jet.sink.MapSink;
 import com.hazelcast.jet.source.MapSource;
 import com.hazelcast.logging.ILogger;
 import com.hazelcast.logging.Logger;
-import com.hazelcast.stream.WordUtil;
+import com.hazelcast.util.WordUtil;
+
 
 /**
  * A distributed word count can be implemented with three vertices as follows:
@@ -53,7 +54,7 @@ public class JetWordCount {
         IMap<String, Integer> sink = instance1.getMap("sink");
 
         System.out.println("Loading War and Peace...");
-        WordUtil.fillMapWithData("2600-0.txt", source);
+        WordUtil.fillMapWithData("war_and_peace_eng.txt", source);
         System.out.println("Done War and Peace...");
 
         DAG dag = new DAG();

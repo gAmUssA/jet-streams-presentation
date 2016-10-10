@@ -23,3 +23,8 @@ dependencies {
     compile "com.hazelcast.jet:hazelcast-jet:0.2"
     compile "com.hazelcast.jet:hazelcast-jet-java.util.stream:0.2"
 }
+
+task collectJars(type: Copy) {
+    into "$buildDir/dependencies"
+    from configurations.testRuntime
+}

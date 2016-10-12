@@ -16,7 +16,7 @@
 
 package com.hazelcast.stream;
 
-import com.hazelcast.core.Hazelcast;
+import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.jet.stream.Distributed;
@@ -27,17 +27,16 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.hazelcast.jet.stream.DistributedCollectors.toIMap;
-import static com.hazelcast.util.WordUtil.EXCLUDES;
-import static com.hazelcast.util.WordUtil.PATTERN;
-import static com.hazelcast.util.WordUtil.fillMapWithData;
+import static com.hazelcast.util.WordUtil.*;
 
 public class WordCountWithDistributedStreams {
 
     public static void main(String[] args) throws Exception {
 
         // two-nodes cluster
-        HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
-        HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();
+        //HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
+        //HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();
+        final HazelcastInstance instance1 = HazelcastClient.newHazelcastClient();
 
         IMap<Integer, String> source = instance1.getMap("source");
 
@@ -62,7 +61,17 @@ public class WordCountWithDistributedStreams {
                         Integer::sum));
         //endregion
 
+        System.out.println(counts.getName());
         //region top20
+       /* final IList<String> top10Map =
+                IStreamMap.streamMap(counts)
+                        .stream()
+                        .filter(e -> Stream.of(EXCLUDES).noneMatch(s -> s.equals(e.getKey())))
+                        .sorted((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()))
+                        .limit(20)
+                        .map(e -> e.getKey() + " : " + e.getValue())
+                        .collect(toIList());
+*/
         final IMap<String, Integer> top10Map = IStreamMap.streamMap(counts)
                 .stream()
                 .filter(e -> Stream
@@ -74,9 +83,12 @@ public class WordCountWithDistributedStreams {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (left, right) -> left));
-
-        System.out.println("Counts=" + top10Map.entrySet());
+        System.out.println("Counts=" + top10Map);
         //endregion
 
+        HazelcastClient.shutdownAll();
+
     }
+
+
 }

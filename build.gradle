@@ -19,9 +19,9 @@ repositories {
     }
 }
 dependencies {
-    compile "com.hazelcast:hazelcast-all:3.7.1"
-    compile "com.hazelcast.jet:hazelcast-jet:0.2"
-    compile "com.hazelcast.jet:hazelcast-jet-java.util.stream:0.2"
+    compile "com.hazelcast:hazelcast-all:3.8-SNAPSHOT"
+    compile "com.hazelcast.jet:hazelcast-jet:0.3-SNAPSHOT"
+    //compile "com.hazelcast.jet:hazelcast-jet-java.util.stream:0.3-SNAPSHOT"
 }
 
 task collectJars(type: Copy) {

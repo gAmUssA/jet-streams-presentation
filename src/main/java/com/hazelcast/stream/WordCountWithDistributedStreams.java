@@ -16,10 +16,12 @@
 
 package com.hazelcast.stream;
 
-import com.hazelcast.client.HazelcastClient;
-import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.IMap;
-import com.hazelcast.jet.stream.Distributed;
+import com.hazelcast.jet.Distributed;
+import com.hazelcast.jet.Jet;
+import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.config.JetConfig;
 import com.hazelcast.jet.stream.IStreamMap;
 import com.hazelcast.util.WordUtil;
 
@@ -27,30 +29,23 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static com.hazelcast.jet.stream.DistributedCollectors.toIMap;
-import static com.hazelcast.util.WordUtil.*;
+import static com.hazelcast.util.WordUtil.EXCLUDES;
+import static com.hazelcast.util.WordUtil.PATTERN;
 
 public class WordCountWithDistributedStreams {
 
     public static void main(String[] args) throws Exception {
 
-        // two-nodes cluster
-        //HazelcastInstance instance1 = Hazelcast.newHazelcastInstance();
-        //HazelcastInstance instance2 = Hazelcast.newHazelcastInstance();
-        final HazelcastInstance instance1 = HazelcastClient.newHazelcastClient();
+        //region init Jet Engine
 
-        IMap<Integer, String> source = instance1.getMap("source");
-
-        //region loading war and peace
-        System.out.println("Loading War and Peace...");
-        fillMapWithData("war_and_peace_eng.txt", source);
-        System.out.println("Done War and Peace...");
+        JetConfig c = new JetConfig();
+        ClientConfig cc = new ClientConfig();
+        final JetInstance jetInstance = Jet.newJetClient(cc);
+        final IStreamMap<Integer, String> streamMap = jetInstance.getMap("source");
         //endregion
 
-        // Wrapping IMap with Distributed decorator
-        IStreamMap<Integer, String> streamMap = IStreamMap.streamMap(source);
-
         //region word count
-        IMap<String, Integer> counts = streamMap.stream()
+        IStreamMap<String, Integer> counts = streamMap.stream()
                 .flatMap(m -> Stream.of(PATTERN.split(m.getValue())))
                 .map(String::toLowerCase)
                 .map(WordUtil::cleanWord)
@@ -62,18 +57,8 @@ public class WordCountWithDistributedStreams {
         //endregion
 
         System.out.println(counts.getName());
-        //region top20
-       /* final IList<String> top10Map =
-                IStreamMap.streamMap(counts)
-                        .stream()
-                        .filter(e -> Stream.of(EXCLUDES).noneMatch(s -> s.equals(e.getKey())))
-                        .sorted((o1, o2) -> Integer.compare(o2.getValue(), o1.getValue()))
-                        .limit(20)
-                        .map(e -> e.getKey() + " : " + e.getValue())
-                        .collect(toIList());
-*/
-        final IMap<String, Integer> top10Map = IStreamMap.streamMap(counts)
-                .stream()
+
+        final IMap<String, Integer> top20Map = counts.stream()
                 .filter(e -> Stream
                         .of(EXCLUDES)
                         .noneMatch(s -> s.equals(e.getKey())))
@@ -83,10 +68,11 @@ public class WordCountWithDistributedStreams {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (left, right) -> left));
-        System.out.println("Counts=" + top10Map);
+
+        System.out.println("Counts=" + top20Map);
         //endregion
 
-        HazelcastClient.shutdownAll();
+        //  HazelcastClient.shutdownAll();
 
     }
 

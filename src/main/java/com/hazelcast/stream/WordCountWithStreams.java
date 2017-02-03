@@ -28,9 +28,8 @@ public class WordCountWithStreams {
         System.out.println("Done War and Peace...");
         //endregion
 
-        final Set<Map.Entry<Integer, String>> streamMap = source.entrySet();
-
         //region word count
+        final Set<Map.Entry<Integer, String>> streamMap = source.entrySet();
         Map<String, Integer> counts = streamMap.stream()
                 .flatMap(m -> Stream.of(PATTERN.split(m.getValue())))
                 .map(String::toLowerCase)
@@ -43,7 +42,7 @@ public class WordCountWithStreams {
         //endregion
 
         //region top20
-        final Map<String, Integer> top10WordsMap = counts.entrySet().stream()
+        final Map<String, Integer> top20WordsMap = counts.entrySet().stream()
                 .filter(e -> Stream.of(EXCLUDES).noneMatch(s -> s.equals(e.getKey())))
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .limit(20)
@@ -53,7 +52,7 @@ public class WordCountWithStreams {
                         (left, right) -> left,
                         LinkedHashMap::new));
 
-        System.out.println("Counts=" + top10WordsMap.entrySet());
+        System.out.println("Counts=" + top20WordsMap.entrySet());
         //endregion
 
     }

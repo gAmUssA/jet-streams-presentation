@@ -28,7 +28,7 @@ public class WordUtil {
         InputStream is = WordUtil.class.getClassLoader().getResourceAsStream(fileName);
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(is));
 
-        String line = null;
+        String line;
         Integer lineNum = 0;
         Map<Integer, String> localMap = new HashMap<>();
         while ((line = reader.readLine()) != null) {

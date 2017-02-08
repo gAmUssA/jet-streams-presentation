@@ -8,13 +8,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.hazelcast.util.WordUtil.EXCLUDES;
-import static com.hazelcast.util.WordUtil.PATTERN;
-import static com.hazelcast.util.WordUtil.fillMapWithData;
+import static com.hazelcast.util.WordUtil.*;
+import static java.util.concurrent.TimeUnit.NANOSECONDS;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * Created by vikgamov on 10/3/16.
+ * Word count using Java 8 Streams + parallelStream
  */
 public class WordCountWithStreams {
 
@@ -30,6 +29,7 @@ public class WordCountWithStreams {
 
         //region word count
         final Set<Map.Entry<Integer, String>> streamMap = source.entrySet();
+        final long start = System.nanoTime();
         Map<String, Integer> counts = streamMap.stream()
                 .flatMap(m -> Stream.of(PATTERN.split(m.getValue())))
                 .map(String::toLowerCase)
@@ -39,6 +39,8 @@ public class WordCountWithStreams {
                         key -> key,
                         value -> 1,
                         Integer::sum));
+        final long end = NANOSECONDS.toMillis(System.nanoTime() - start);
+        System.out.println(end + " mills");
         //endregion
 
         //region top20

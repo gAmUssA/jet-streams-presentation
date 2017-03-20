@@ -1,7 +1,33 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.2.RELEASE'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+//mainClassName = 'com.hazelcast.bootiful.MicroserviceApplication'
+
+jar {
+    baseName = 'jet-streams'
+    version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
 
 repositories {
     jcenter()
+    mavenLocal()
 
     maven {
         name 'Hazelcast OSS Snapshots'
@@ -18,9 +44,26 @@ repositories {
         url 'https://repository-hazelcast-l337.forge.cloudbees.com/snapshot/'
     }
 }
+
 dependencies {
-    compile "com.hazelcast:hazelcast-all:3.8-SNAPSHOT"
-    compile "com.hazelcast.jet:hazelcast-jet:0.3"
+
+    // hazelcast
+    compile "com.hazelcast:hazelcast-all:${hazelcastVersion}"
+    compile "com.hazelcast.jet:hazelcast-jet:${hazelcastJetVersion}"
+
+    // oracle coherence
+    compile "com.oracle.coherence:coherence:${coherenceVersion}"
+
+    // stuff
+    compileOnly('org.projectlombok:lombok:1.16.10')
+    compile('org.codehaus.groovy:groovy-all:2.4.7')
+
+    // spring-boot
+    compile('org.springframework.boot:spring-boot-starter-cache')
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    // test dependencies
+    testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
 task collectJars(type: Copy) {

@@ -64,7 +64,7 @@ public class Starter {
         Remote.Predicate<InvocableMap.Entry<String, Integer>> p1 = (Remote.Predicate<InvocableMap.Entry<String, Integer>>) e -> Stream.of(EXCLUDES).noneMatch(s -> s.equals(e.getKey()));
         //region top20
         final RemoteStream<InvocableMap.Entry<String, Integer>> stream = counts.stream();
-        final LinkedHashMap<Object, Integer> top20WordsMap = stream
+        /*final LinkedHashMap<Object, Integer> top20WordsMap = stream
                 .map()
                 .filter(p1)
                 //.sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
@@ -76,7 +76,7 @@ public class Starter {
                         (left, right) -> left,
                         LinkedHashMap::new));
 
-        System.out.println("Counts=" + top20WordsMap.entrySet());
+        System.out.println("Counts=" + top20WordsMap.entrySet());*/
         //endregion
 
 

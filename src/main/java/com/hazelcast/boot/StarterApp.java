@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class StarterApp {
     public static void main(String[] args) {
-        SpringApplication.run(StarterApp.class, args);
+        System.getProperties().put("server.port", 9091);
+        SpringApplication
+                .run(StarterApp.class, args);
     }
 }

@@ -21,11 +21,15 @@ public class Simple {
         fillMapWithData("war_and_peace_eng.txt", source);
         System.out.println("Done War and Peace...");
         //endregion
+
         final long start = System.nanoTime();
         for (String line : source.values()) {
             for (String word : PATTERN.split(line)) {
                 if (word.length() >= 5)
-                    counts.compute(cleanWord(word).toLowerCase(), (w, c) -> c == null ? 1L : c + 1);
+                    counts.compute(
+                            cleanWord(word).toLowerCase(),
+                            (w, c) -> c == null ? 1L : c + 1
+                    );
             }
         }
         final long end = NANOSECONDS.toMillis(System.nanoTime() - start);

@@ -18,7 +18,6 @@ package com.hazelcast.stream;
 
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.core.IMap;
-import com.hazelcast.jet.Distributed;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.config.JetConfig;
@@ -53,6 +52,7 @@ public class WordCountWithDistributedStreams {
                 .map(WordUtil::cleanWord)
                 .filter(m -> m.length() >= 5)
                 .collect(toIMap(
+                        "counts",
                         m -> m,
                         m -> 1,
                         Integer::sum));
@@ -65,9 +65,10 @@ public class WordCountWithDistributedStreams {
                 .filter(e -> Stream
                         .of(EXCLUDES)
                         .noneMatch(s -> s.equals(e.getKey())))
-                .sorted((Distributed.Comparator<Map.Entry<String, Integer>>) (o1, o2) -> o2.getValue().compareTo(o1.getValue()))
+                .sorted()
                 .limit(20)
                 .collect(toIMap(
+                        "top20",
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (left, right) -> left));

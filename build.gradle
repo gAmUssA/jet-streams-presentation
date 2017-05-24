@@ -55,12 +55,6 @@ dependencies {
     // workaround https://github.com/hazelcast/hazelcast-jet/issues/366
     compile 'javax.cache:cache-api:1.0.0'
 
-    // oracle coherence
-    compile "com.oracle.coherence:coherence:${coherenceVersion}"
-
-    // infinispan
-    compile "org.infinispan:infinispan-embedded:9.0.0.Final"
-
     // stuff
     compileOnly('org.projectlombok:lombok:1.16.10')
     compile('org.codehaus.groovy:groovy-all:2.4.7')

@@ -4,15 +4,13 @@ import com.hazelcast.config.XmlConfigBuilder;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.config.JetConfig;
+import com.hazelcast.jet.stream.IStreamMap;
 
 import java.util.Map;
 
 import static com.hazelcast.util.WordUtil.SOURCE_SUFFIX;
 import static com.hazelcast.util.WordUtil.fillMapWithData;
 
-/**
- * Created by vikgamov on 10/3/16.
- */
 public class Member {
     public static void main(String[] args) throws Exception {
         JetConfig jetConfig = new JetConfig();

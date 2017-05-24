@@ -22,14 +22,6 @@ Viktor Gamov <viktor@hazelcast.com>, © 2017 Hazelcast, Inc.
 :highlightjs-theme: idea
 :experimental:
 
- Some useful stuff for this demo
+Some useful stuff for this demo
 
 toc::[]
-
-== Oracle Coherence
-
-=== install jars
-
-----
-mvn install:install-file -Dfile=$COHERENCE_HOME/lib/coherence.jar  -DpomFile=$COHERENCE_HOME/plugins/maven/com/oracle/coherence/coherence/12.2.1/coherence.12.2.1.pom
-----

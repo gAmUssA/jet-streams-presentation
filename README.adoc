@@ -1,4 +1,4 @@
-= Document Title
+= NY Java SIG: Hazelcast IMDG & Jet Workshop
 Viktor Gamov <viktor@hazelcast.com>, © 2017 Hazelcast, Inc.
 2017-03-16
 :revdate: 2017-03-16 23:15:48 -0600
@@ -25,3 +25,49 @@ Viktor Gamov <viktor@hazelcast.com>, © 2017 Hazelcast, Inc.
 Some useful stuff for this demo
 
 toc::[]
+
+
+== NY JavaSig HOW
+
+- Prerequisites:
+    - `java -version`
+    - `mvn --version`
+    - Intellij IDEA
+
+----
+git clone https://github.com/gAmUssA/jet-streams-presentation.git
+----
+
+== Install Management Center
+
+
+. A zip file
+.. ask the instructor for this on a memory stick
++
+or
+.. download from https://hazelcast.com/hazelcast-enterprise-download/
+    You don’t need a license key for small clusters, 1 or 2 nodes
+. Unzip
+. In the `mancenter` folder
+.. run the `startManCenter` script
++
+or
+.. deploy the `mancenter-3.8*.war` to Tomcat,  JBoss, etc
+
+== Lab 1
+
+Start Hazelcast Member 
+
+== Lab 2 
+
+populate member
+
+== Lab 3
+
+word count with streams
+
+== Lab 4 
+
+word 
+
+
